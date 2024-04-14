@@ -1,10 +1,8 @@
 #include <iostream>
 #include "MString.h"
-#include "Stack.h" //zincluduje linkedlist
+#include "Stack.h"
 #include "AISD1.h"
 using namespace std;
-
-//#define INT_MAX 2147483647 //mozliwe ze nie trzeba definiowac
 
 int applyIf(Stack<int>& numbers) {
     int a = numbers.pop(); //fałsz
@@ -189,32 +187,16 @@ void dotPostfix(Stack<MString>& operatorsStack, char c, MString& postfixStr, cha
     operatorsStack.push(tempOperand);
 }
 
-MString getFunctionName(char c1, char c2) {
-    MString functionName = "";
-    switch (c1) {
-    case 'I':
-        functionName += "IF";
-        break;
-    case 'N':
-        functionName += "N";
-        break;
-    case 'M':
-        if (c2 == 'I') {
-            functionName += "MIN";
-        }
-        else {
-            functionName += "MAX";
-        }
-        break;
-    default:
-        break;
-    }
-    return functionName;
-}
-
 void changeMaxMinParametersCount(Stack<MString>& operatorsStack)
 {
-    MString maxOrMinString = operatorsStack.getElement(1);
+    int elementNumber = 1;
+
+    if (isOperator(operatorsStack.top()[0]) && operatorsStack.size() > 2) {
+        elementNumber = 2;
+    }
+
+    MString maxOrMinString = operatorsStack.getElement(elementNumber);
+
     if (maxOrMinString[0] == 'M')
     {
         MString prefix = maxOrMinString.substr(0, 3);
@@ -222,7 +204,7 @@ void changeMaxMinParametersCount(Stack<MString>& operatorsStack)
         int number = num.toNumber() + 1;
         MString result = prefix;
         result += MString::toString(number);
-        operatorsStack.getElement(1) = result;
+        operatorsStack.getElement(elementNumber) = result;
     }
 }
 
@@ -417,6 +399,7 @@ int main()
         else {
             cout << result << endl;
         }
+
         cout << endl;
     }
     return 0;
